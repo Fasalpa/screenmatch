@@ -93,17 +93,34 @@ public class Principal {
 
 		//Buscando episodios por partes del título.
 
-		System.out.println("Escribe el título del episodio a buscar: ");
-		var parteTitulo = teclado.nextLine();
+//		System.out.println("Escribe el título del episodio a buscar: ");
+//		var parteTitulo = teclado.nextLine();
+//
+//		Optional<Episodio> episodioABuscar = episodios.stream()
+//				.filter(e -> e.getTitulo().toUpperCase().contains(parteTitulo.toUpperCase()))
+//				.findFirst();
+//		if (episodioABuscar.isPresent()){
+//			System.out.println("Coincidencias encontradas: " + episodioABuscar.get());
+//		}else {
+//			System.out.println("No hay coincidencias.");
+//		}
 
-		Optional<Episodio> episodioABuscar = episodios.stream()
-				.filter(e -> e.getTitulo().toUpperCase().contains(parteTitulo.toUpperCase()))
-				.findFirst();
-		if (episodioABuscar.isPresent()){
-			System.out.println("Coincidencias encontradas: " + episodioABuscar.get());
-		}else {
-			System.out.println("No hay coincidencias.");
-		}
+		//Cración de mapa de temporadas (evaluaciones)
+		Map<Integer, Double> evaluacionesPorTemporada = episodios.stream()
+				.filter(e -> e.getEvaluacion() > 0.0)
+				.collect(Collectors.groupingBy(Episodio::getTemporada,
+						Collectors.averagingDouble(Episodio::getEvaluacion)));
+		System.out.println(evaluacionesPorTemporada);
+
+//generación de estadisticas
+		DoubleSummaryStatistics est = episodios.stream()
+				.filter(e -> e.getEvaluacion() > 0.0).collect(Collectors.summarizingDouble(Episodio::getEvaluacion));
+
+		System.out.println("Media de evaliuaciones: " + est.getAverage());
+		System.out.println("Episodio mejor evaluado: " + est.getMax());
+		System.out.println("Episodio peor puntuado: " + est.getMin());
+		System.out.println("Total puntuaciones revisadas: " + est.getCount());
+
 	}
 
 }
