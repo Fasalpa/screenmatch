@@ -9,10 +9,7 @@ import com.alura.screenmatch.service.ConvierteDatos;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Principal {
@@ -73,27 +70,40 @@ public class Principal {
 				.flatMap(t -> t.episodios().stream().map(d -> new Episodio(t.numeroDeTemporada(), d)))
 				.collect(Collectors.toList());
 
-		episodios.forEach(System.out::println);
+//		episodios.forEach(System.out::println);
 
-		//busqueda de episodios por fechas
-		System.out.println("Digíta el año: ");
-		var fecha = teclado.nextInt();
-		teclado.nextLine();
+//		//busqueda de episodios por fechas
+//		System.out.println("Digíta el año: ");
+//		var fecha = teclado.nextInt();
+//		teclado.nextLine();
+//
+//		LocalDate fechaBusqueda = LocalDate.of(fecha, 1, 1);
+//
+////Con esto le damos el formato que estamos acostumbrados en LatinoAmerica.
+//		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+//
+//		episodios.stream()
+//				.filter(e -> e.getFechaDeLanzamiento() != null && e.getFechaDeLanzamiento()
+//						.isAfter(fechaBusqueda))
+//				.forEach(e -> System.out.println(
+//						"Temporada: [" + e.getTemporada() + "] " +
+//								"Episodio: [" + e.getNumeroEpisodio() + "] " +
+//								e.getTitulo() + " Fecha de lanzamiento: [" + e.getFechaDeLanzamiento().format(dtf) + "] "
+//				));
 
-		LocalDate fechaBusqueda = LocalDate.of(fecha, 1, 1);
+		//Buscando episodios por partes del título.
 
-//Con esto le damos el formato que estamos acostumbrados en LatinoAmerica.
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		System.out.println("Escribe el título del episodio a buscar: ");
+		var parteTitulo = teclado.nextLine();
 
-		episodios.stream()
-				.filter(e -> e.getFechaDeLanzamiento() != null && e.getFechaDeLanzamiento()
-						.isAfter(fechaBusqueda))
-				.forEach(e -> System.out.println(
-						"Temporada: [" + e.getTemporada() + "] " +
-								"Episodio: [" + e.getNumeroEpisodio() + "] " +
-								e.getTitulo() + " Fecha de lanzamiento: [" + e.getFechaDeLanzamiento().format(dtf)+ "] "
-				));
-
+		Optional<Episodio> episodioABuscar = episodios.stream()
+				.filter(e -> e.getTitulo().toUpperCase().contains(parteTitulo.toUpperCase()))
+				.findFirst();
+		if (episodioABuscar.isPresent()){
+			System.out.println("Coincidencias encontradas: " + episodioABuscar.get());
+		}else {
+			System.out.println("No hay coincidencias.");
+		}
 	}
 
 }
