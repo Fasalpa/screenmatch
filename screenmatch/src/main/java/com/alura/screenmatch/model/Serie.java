@@ -1,15 +1,26 @@
 package com.alura.screenmatch.model;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
+import jakarta.persistence.*;
 
-import java.util.Optional;
+import org.springframework.boot.autoconfigure.web.WebProperties;
+
 import java.util.OptionalDouble;
 
+@Entity
+@Table(name = "Series")
+
 public class Serie {
+	@Id
+	//generar un autoincrementable
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	//No queremos que hayan dos nombres iguales
+	@Column(unique = true)
 	private String titulo;
 	private Integer totalTemporadas;
 	private Double evaluacion;
 	private String poster;
+	@Enumerated(EnumType.STRING)
 	private Categoria genero;
 	private String actores;
 	private String lenguaje;
@@ -30,13 +41,29 @@ public class Serie {
 	public String toString() {
 		return
 				"Genero: " + genero +
-				", Titulo: '" + titulo + '\'' +
+						", Titulo: '" + titulo + '\'' +
 						", Sinopsis: '" + sinopsis + '\'' +
-				", Total Temporadas: " + totalTemporadas +
-				", Evaluacion: " + evaluacion +
-				", Poster: " + poster + '\'' +
-				", Actores: '" + actores + '\'' +
-				", Lenguaje: '" + lenguaje + '\'';
+						", Total Temporadas: " + totalTemporadas +
+						", Evaluacion: " + evaluacion +
+						", Poster: " + poster + '\'' +
+						", Actores: '" + actores + '\'' +
+						", Lenguaje: '" + lenguaje + '\'';
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getSinopsis() {
+		return sinopsis;
+	}
+
+	public void setSinopsis(String sinopsis) {
+		this.sinopsis = sinopsis;
 	}
 
 	public String getTitulo() {
